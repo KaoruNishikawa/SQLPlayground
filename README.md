@@ -1,0 +1,2 @@
+# SQLPlayground
+Static SQL Playground
