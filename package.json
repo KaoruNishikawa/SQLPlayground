@@ -1,0 +1,36 @@
+{
+    "name": "sql-playground",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "d3": "^7.8.5",
+        "highlight.js": "^11.9.0",
+        "next": "14.0.2",
+        "react": "^18",
+        "react-dom": "^18",
+        "react-simple-code-editor": "^0.13.1",
+        "sql.js": "^1.8.0"
+    },
+    "devDependencies": {
+        "@types/d3": "^7.4.3",
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "@types/sql.js": "^1.4.9",
+        "eslint": "^8",
+        "eslint-config-next": "14.0.2",
+        "sass": "^1.69.5",
+        "typescript": "^5"
+    },
+    "browser": {
+        "fs": false,
+        "os": false,
+        "path": false
+    }
+}
