@@ -44,16 +44,16 @@ export default function Home() {
     useEffect(() => {
         async function load() {
             const _databases: { data: any[], name: string }[] = []
-            await loadCsvFile('/users.csv').then(data => {
+            await loadCsvFile('./users.csv').then(data => {
                 _databases.push({ data, name: 'users' })
             })
-            await loadCsvFile('/timezones.csv').then(data => {
+            await loadCsvFile('./timezones.csv').then(data => {
                 _databases.push({ data, name: 'timezones' })
             })
-            await loadCsvFile('/articles.csv').then(data => {
+            await loadCsvFile('./articles.csv').then(data => {
                 _databases.push({ data, name: 'articles' })
             })
-            await loadCsvFile('/comments.csv').then(data => {
+            await loadCsvFile('./comments.csv').then(data => {
                 _databases.push({ data, name: 'comments' })
             })
             setDatabases([...databases, ..._databases])
