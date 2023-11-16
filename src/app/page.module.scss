@@ -1,0 +1,86 @@
+.container {
+    width: 100vw;
+    display: flex;
+    gap: 1em;
+
+    &>div {
+        padding: 1em;
+        max-height: calc(100vh - 3em);
+    }
+}
+
+.databaseList {
+    background: #0f04;
+    width: 15%;
+    height: 100vh;
+
+    & li {
+        list-style: none;
+        padding: 0.5em;
+        border-bottom: 1px solid #fff5;
+    }
+}
+
+
+$lineNumberWidth: 2em;
+
+.code {
+    width: 45%;
+}
+
+.result {
+    width: 40%;
+}
+
+
+.history {
+    font-family: 'Fira code', 'Fira Mono', monospace;
+    counter-reset: line;
+
+    & :focus {
+        outline: none;
+        border: none;
+    }
+}
+
+.historyContainer,
+.editorContainer {
+    padding-left: $lineNumberWidth;
+}
+
+.editor {
+    font-family: 'Fira code', 'Fira Mono', monospace;
+    outline: 2px solid #30f;
+
+    & :focus {
+        outline: inherit;
+    }
+}
+
+.historyLineNumber::before {
+    position: absolute;
+    right: 100%;
+    margin-right: 10px;
+    text-align: right;
+    opacity: 0.9;
+    width: $lineNumberWidth;
+    user-select: none;
+    counter-increment: line;
+    content: counter(line);
+    color: #dfd;
+    background: #fff5;
+}
+
+.editorLineNumber::before {
+    position: absolute;
+    right: 100%;
+    margin-right: 10px;
+    text-align: right;
+    opacity: 0.9;
+    width: $lineNumberWidth;
+    user-select: none;
+    counter-increment: line;
+    content: '>>>';
+    color: #dfd;
+    background: #fff5;
+}

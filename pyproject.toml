@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "sqlplayground"
+version = "0.1.0"
+description = "Prepare default data for SQL playground"
+authors = ["Kaoru Nishikawa <kq.nishikawa@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.8.1, <4"
+ipsum = "^0.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
