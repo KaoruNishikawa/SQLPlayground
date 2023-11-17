@@ -45,7 +45,7 @@ $lineNumberWidth: 2em;
 
 .historyContainer,
 .editorContainer {
-    padding-left: $lineNumberWidth;
+    padding-left: calc(10px + $lineNumberWidth);
 }
 
 .editor {
@@ -83,4 +83,14 @@ $lineNumberWidth: 2em;
     content: '>>>';
     color: #dfd;
     background: #fff5;
+}
+
+button.executeButton {
+    margin: 0.5em 0;
+    background-color: #fff5;
+    padding: 3px;
+
+    &:hover {
+        background-color: #fffa;
+    }
 }
