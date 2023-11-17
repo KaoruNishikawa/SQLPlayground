@@ -14,6 +14,7 @@
         "next": "14.0.2",
         "react": "^18",
         "react-dom": "^18",
+        "react-resizable-panels": "^0.0.57",
         "react-simple-code-editor": "^0.13.1",
         "sql.js": "^1.8.0"
     },
