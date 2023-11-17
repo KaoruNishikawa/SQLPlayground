@@ -99,7 +99,7 @@ export default function Home() {
             <div className={styles.container}>
                 <div className={styles.databaseList}>
                     <div className='center'>
-                        <h2>DATABASES</h2>
+                        <h2>TABLES</h2>
                     </div>
                     <ul>
                         {databases.map((db, index) => (
