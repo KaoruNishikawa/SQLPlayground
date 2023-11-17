@@ -133,12 +133,15 @@ export default function Home() {
                             insertSpaces={true}
                             readOnly={false}
                             style={{ overflow: 'visible' }}
+                            placeholder='Enter SQLite query here;'
                         />
                     </div>
                     <button
                         type='button'
                         disabled={db === null}
                         onClick={handleExecute}
+                        title='Execute query (Shift + Enter)'
+                        className={styles.executeButton}
                     >Execute</button>
                     <span style={{ color: '#f00' }}>{error}</span>
                 </div>
