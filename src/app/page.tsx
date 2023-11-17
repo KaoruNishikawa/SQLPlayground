@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Editor from 'react-simple-code-editor'
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import initSqlJs, { Database } from 'sql.js'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/xt256.css'
@@ -96,8 +97,13 @@ export default function Home() {
 
     return (
         <main className={styles.main}>
-            <div className={styles.container}>
-                <div className={styles.databaseList}>
+            <PanelGroup direction='horizontal' className={styles.container}>
+                <Panel
+                    className={styles.databaseList + ' ' + styles.panel}
+                    defaultSizePercentage={15}
+                    collapsible={false}
+                    minSizePixels={120}
+                >
                     <div className='center'>
                         <h2>TABLES</h2>
                     </div>
@@ -107,8 +113,13 @@ export default function Home() {
                         ))}
                         {/* TODO: Add file drop zone */}
                     </ul>
-                </div>
-                <div className={styles.code}>
+                </Panel>
+                <PanelResizeHandle className={styles.resizeHandle} />
+                <Panel
+                    className={styles.code + ' ' + styles.panel}
+                    defaultSizePercentage={45}
+                    collapsible={false}
+                >
                     <div className={styles.historyContainer}>
                         <Editor
                             value={history.join('\n')}
@@ -143,12 +154,17 @@ export default function Home() {
                         title='Execute query (Shift + Enter)'
                         className={styles.executeButton}
                     >Execute</button>
-                    <span style={{ color: '#f00' }}>{error}</span>
-                </div>
-                <div className={styles.result}>
+                    <span className={styles.errorDisplay}>{error}</span>
+                </Panel>
+                <PanelResizeHandle className={styles.resizeHandle} />
+                <Panel
+                    className={styles.result + ' ' + styles.panel}
+                    defaultSizePercentage={40}
+                    collapsible={false}
+                >
                     <Table data={result} />
-                </div>
-            </div>
+                </Panel>
+            </PanelGroup>
         </main>
     )
 }

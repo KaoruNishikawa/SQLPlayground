@@ -1,9 +1,8 @@
 .container {
     width: 100vw;
     display: flex;
-    gap: 1em;
 
-    &>div {
+    &>div.panel {
         padding: 1em;
         max-height: calc(100vh - 3em);
     }
@@ -11,7 +10,6 @@
 
 .databaseList {
     background: #0f04;
-    width: 15%;
     height: 100vh;
 
     & li {
@@ -23,14 +21,6 @@
 
 
 $lineNumberWidth: 2em;
-
-.code {
-    width: 45%;
-}
-
-.result {
-    width: 40%;
-}
 
 
 .history {
@@ -85,6 +75,15 @@ $lineNumberWidth: 2em;
     background: #fff5;
 }
 
+.resizeHandle {
+    background-color: transparent;
+    padding: 3px;
+
+    &:hover {
+        background-color: #fff5;
+    }
+}
+
 button.executeButton {
     margin: 0.5em 0;
     background-color: #fff5;
@@ -93,4 +92,9 @@ button.executeButton {
     &:hover {
         background-color: #fffa;
     }
+}
+
+span.errorDisplay {
+    color: #f00;
+    margin-left: 1em;
 }
