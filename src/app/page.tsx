@@ -40,6 +40,8 @@ export default function Home() {
         } else {
             databases.forEach((csv) => fill(db, csv))
         }
+
+        return db?.close
     }, [databases])
 
     useEffect(() => {
