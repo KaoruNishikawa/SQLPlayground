@@ -28,40 +28,43 @@ export default function Home() {
             return new SQL.Database()
         }
 
+        async function load() {
+            const _databases: { data: any[], name: string }[] = []
+            const fetchingCsv = [
+                loadCsvFile('./users.csv').then(data => {
+                    _databases.push({ data, name: 'users' })
+                }),
+                loadCsvFile('./timezones.csv').then(data => {
+                    _databases.push({ data, name: 'timezones' })
+                }),
+                loadCsvFile('./articles.csv').then(data => {
+                    _databases.push({ data, name: 'articles' })
+                }),
+                loadCsvFile('./comments.csv').then(data => {
+                    _databases.push({ data, name: 'comments' })
+                }),
+            ]
+            await Promise.all(fetchingCsv)
+            setDatabases([...databases, ..._databases])
+            return _databases
+        }
+
         function fill(_db: Database, database: { data: any[], name: string }) {
             checkIfTableExists(_db, database.name) || fillDatabase(_db, database)
         }
 
-        if (db === null) {
-            setupSql().then((_db) => {
-                setDb(_db)
-                databases.forEach((csv) => fill(_db, csv))
-            })
-        } else {
-            databases.forEach((csv) => fill(db, csv))
-        }
+        load().then(_databases => {
+            if (db === null) {
+                setupSql().then((_db) => {
+                    setDb(_db)
+                    _databases.forEach((csv) => fill(_db, csv))
+                })
+            } else {
+                _databases.forEach((csv) => fill(db, csv))
+            }
+        })
 
         return db?.close
-    }, [databases])
-
-    useEffect(() => {
-        async function load() {
-            const _databases: { data: any[], name: string }[] = []
-            await loadCsvFile('./users.csv').then(data => {
-                _databases.push({ data, name: 'users' })
-            })
-            await loadCsvFile('./timezones.csv').then(data => {
-                _databases.push({ data, name: 'timezones' })
-            })
-            await loadCsvFile('./articles.csv').then(data => {
-                _databases.push({ data, name: 'articles' })
-            })
-            await loadCsvFile('./comments.csv').then(data => {
-                _databases.push({ data, name: 'comments' })
-            })
-            setDatabases([...databases, ..._databases])
-        }
-        load()
     }, [])
 
     const handleExecute = () => {
