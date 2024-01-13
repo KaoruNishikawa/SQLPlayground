@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     <div className='center' style={{ width: '100%', height: '100%' }}>
                         <Image
                             src={logo}
-                            style={{ height: '100%' }}
+                            style={{ height: '65%', width: 'auto' }}
                             alt='SQL Playground Logo'
                             priority={true}
                         />
