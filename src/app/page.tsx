@@ -127,7 +127,7 @@ export default function Home() {
             if (history.length === 0) { return }
 
             if (historyCursor === -1) {
-                setQuery(stashed || '')
+                // Do nothing
             } else if (historyCursor === history.length - 1) {
                 setHistoryCursor(-1)
                 setQuery(stashed || '')
