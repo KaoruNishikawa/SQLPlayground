@@ -27,7 +27,7 @@ function convertCsvToSql(name: string, data: any[]): CsvToSqlBridge {
     const columns = keys.map((column, index) => {
         const values = data.map((record) => record[column])
         const type = inferType(values)
-        console.log(`Column '${column}' has type ${type.sql}`)
+        console.debug(`Column '${column}' has type ${type.sql}`)
         return { column, type, values, index }
     })
 

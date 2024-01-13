@@ -19,6 +19,8 @@ export default function Home() {
     const [history, setHistory] = useState<string[]>([])
     const [error, setError] = useState('')
     const [databases, setDatabases] = useState<{ data: any[], name: string }[]>([])
+    const [stashed, setStashed] = useState<string | null>(null)
+    const [historyCursor, setHistoryCursor] = useState<number>(-1)
 
     useEffect(() => {
         async function setupSql() {
@@ -28,40 +30,43 @@ export default function Home() {
             return new SQL.Database()
         }
 
+        async function load() {
+            const _databases: { data: any[], name: string }[] = []
+            const fetchingCsv = [
+                loadCsvFile('./users.csv').then(data => {
+                    _databases.push({ data, name: 'users' })
+                }),
+                loadCsvFile('./timezones.csv').then(data => {
+                    _databases.push({ data, name: 'timezones' })
+                }),
+                loadCsvFile('./articles.csv').then(data => {
+                    _databases.push({ data, name: 'articles' })
+                }),
+                loadCsvFile('./comments.csv').then(data => {
+                    _databases.push({ data, name: 'comments' })
+                }),
+            ]
+            await Promise.all(fetchingCsv)
+            setDatabases([...databases, ..._databases])
+            return _databases
+        }
+
         function fill(_db: Database, database: { data: any[], name: string }) {
             checkIfTableExists(_db, database.name) || fillDatabase(_db, database)
         }
 
-        if (db === null) {
-            setupSql().then((_db) => {
-                setDb(_db)
-                databases.forEach((csv) => fill(_db, csv))
-            })
-        } else {
-            databases.forEach((csv) => fill(db, csv))
-        }
+        load().then(_databases => {
+            if (db === null) {
+                setupSql().then((_db) => {
+                    setDb(_db)
+                    _databases.forEach((csv) => fill(_db, csv))
+                })
+            } else {
+                _databases.forEach((csv) => fill(db, csv))
+            }
+        })
 
         return db?.close
-    }, [databases])
-
-    useEffect(() => {
-        async function load() {
-            const _databases: { data: any[], name: string }[] = []
-            await loadCsvFile('./users.csv').then(data => {
-                _databases.push({ data, name: 'users' })
-            })
-            await loadCsvFile('./timezones.csv').then(data => {
-                _databases.push({ data, name: 'timezones' })
-            })
-            await loadCsvFile('./articles.csv').then(data => {
-                _databases.push({ data, name: 'articles' })
-            })
-            await loadCsvFile('./comments.csv').then(data => {
-                _databases.push({ data, name: 'comments' })
-            })
-            setDatabases([...databases, ..._databases])
-        }
-        load()
     }, [])
 
     const handleExecute = () => {
@@ -87,13 +92,51 @@ export default function Home() {
         }
     }
 
-    function handleKeyExecute(
+    function handleKeyDown(
         e: React.KeyboardEvent<HTMLTextAreaElement>
             & React.KeyboardEvent<HTMLDivElement>
     ) {
         if (e.key === 'Enter' && e.shiftKey) {
             e.preventDefault()
             handleExecute()
+
+            setStashed(null)
+            setHistoryCursor(-1)
+            return
+        }
+
+        if (e.key === 'ArrowUp') {
+            e.preventDefault()
+            if (history.length === 0) { return }
+
+            if (historyCursor === -1) {
+                setStashed(query)
+                setHistoryCursor(history.length - 1)
+                setQuery(history[history.length - 1])
+            } else if (historyCursor === 0) {
+                null
+            } else if (historyCursor <= history.length - 1) {
+                setHistoryCursor(historyCursor - 1)
+                setQuery(history[historyCursor - 1])
+            }
+            return
+        }
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault()
+            if (history.length === 0) { return }
+
+            if (historyCursor === -1) {
+                setQuery(stashed || '')
+            } else if (historyCursor === history.length - 1) {
+                setHistoryCursor(-1)
+                setQuery(stashed || '')
+                setStashed(null)
+            } else if (historyCursor < history.length) {
+                setHistoryCursor(historyCursor + 1)
+                setQuery(history[historyCursor + 1])
+            }
+            return
         }
     }
 
@@ -141,7 +184,7 @@ export default function Home() {
                             highlight={code => hljs.highlight(code, { language: 'sql' }).value.split('\n').map((line, index) => (`<span class="${styles.editorLineNumber}">${line}</span>`)).join('\n')}
                             padding={0}
                             className={styles.editor}
-                            onKeyDown={handleKeyExecute}
+                            onKeyDown={handleKeyDown}
                             tabSize={4}
                             insertSpaces={true}
                             readOnly={false}
