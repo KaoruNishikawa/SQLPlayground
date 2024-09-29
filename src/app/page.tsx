@@ -25,7 +25,7 @@ export default function Home() {
     useEffect(() => {
         async function setupSql() {
             const SQL = await initSqlJs({
-                locateFile: () => '/sql-wasm.wasm'
+                locateFile: () => 'sql-wasm.wasm'
             })
             return new SQL.Database()
         }
