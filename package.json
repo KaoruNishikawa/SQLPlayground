@@ -12,7 +12,7 @@
         "classnames": "^2.5.1",
         "d3": "^7.8.5",
         "highlight.js": "^11.9.0",
-        "next": "14.2.15",
+        "next": "14.2.21",
         "react": "^18",
         "react-dom": "^18",
         "react-resizable-panels": "^0.0.57",
