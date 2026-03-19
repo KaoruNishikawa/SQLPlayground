@@ -1,16 +1,16 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import Editor from 'react-simple-code-editor'
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
+import { Panel, Group, Separator } from 'react-resizable-panels'
 import initSqlJs, { Database } from 'sql.js'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/xt256.css'
+import classNames from 'classnames'
 
 import Table from '@/components/Table'
 import styles from './page.module.scss'
 import { checkIfTableExists, fillDatabase, loadCsvFile } from '@/features/csvToSql'
-
 
 export default function Home() {
     const [db, setDb] = useState<Database | null>(null)
@@ -21,6 +21,19 @@ export default function Home() {
     const [databases, setDatabases] = useState<{ data: any[], name: string }[]>([])
     const [stashed, setStashed] = useState<string | null>(null)
     const [historyCursor, setHistoryCursor] = useState<number>(-1)
+    const [panelDirection, setPanelDirection] = useState<'horizontal' | 'vertical'>('horizontal')
+
+    useLayoutEffect(() => {
+        function handleResize() {
+            const width = window.innerWidth
+            const height = window.innerHeight
+            setPanelDirection(width < height ? 'vertical' : 'horizontal')
+        }
+
+        handleResize()
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
 
     useEffect(() => {
         async function setupSql() {
@@ -139,15 +152,17 @@ export default function Home() {
             return
         }
     }
+    const [filename, setFilename] = useState<string | null>(null)
 
     return (
         <main className={styles.main}>
-            <PanelGroup direction='horizontal' className={styles.container}>
+            <span>{filename}</span>
+            <Group orientation={panelDirection} className={styles.container}>
                 <Panel
-                    className={styles.databaseList + ' ' + styles.panel}
-                    defaultSizePercentage={15}
+                    className={classNames(styles.databaseList, styles.panel)}
+                    defaultSize={'15%'}
                     collapsible={false}
-                    minSizePixels={120}
+                    minSize={120}
                 >
                     <div className='center'>
                         <h2>TABLES</h2>
@@ -159,10 +174,10 @@ export default function Home() {
                         {/* TODO: Add file drop zone */}
                     </ul>
                 </Panel>
-                <PanelResizeHandle className={styles.resizeHandle} />
+                <Separator className={styles.resizeHandle} />
                 <Panel
-                    className={styles.code + ' ' + styles.panel}
-                    defaultSizePercentage={45}
+                    className={classNames(styles.code, styles.panel)}
+                    defaultSize={'45%'}
                     collapsible={false}
                 >
                     <div className={styles.historyContainer}>
@@ -201,15 +216,15 @@ export default function Home() {
                     >Execute</button>
                     <span className={styles.errorDisplay}>{error}</span>
                 </Panel>
-                <PanelResizeHandle className={styles.resizeHandle} />
+                <Separator className={styles.resizeHandle} />
                 <Panel
-                    className={styles.result + ' ' + styles.panel}
-                    defaultSizePercentage={40}
+                    className={classNames(styles.result, styles.panel)}
+                    defaultSize={'40%'}
                     collapsible={false}
                 >
                     <Table data={result} />
                 </Panel>
-            </PanelGroup>
+            </Group>
         </main>
     )
 }
